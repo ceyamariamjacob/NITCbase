@@ -64,12 +64,8 @@ void stage2(){
 		printf("  %s: %s\n", attrCatRecord[ATTRCAT_ATTR_NAME_INDEX].sVal, attrType);
 	      }
 	      
-	      if(attrCatSlotIndex == attrCatHeader.numSlots-1){
-	      	attrCatSlotIndex=-1;
-	      	attrCatBuffer=RecBuffer(attrCatHeader.rblock);
-	      	attrCatBuffer.getHeader(&attrCatHeader);
-	      }else{
-	      attrCatSlotIndex++;}
+	 
+	      attrCatSlotIndex++;
 	    }
 	    printf("\n");
 	  }
@@ -78,7 +74,7 @@ void stage2(){
 
 }
 
-//STAGE 2 EXCERCISE 
+//STAGE 2 EXCERCISE - PRINT ATTRIBUTE CATALOG
 void stage2ex1(){
 
 	  RecBuffer relCatBuffer(RELCAT_BLOCK);
@@ -121,7 +117,7 @@ void stage2ex1(){
 
 }
 
-/////////////////////////////////
+//STAGE 2 EXCERCISE - CHANGE ATTRIBUTE 'CLASS' TO 'BATCH' IN STUDENTS TABLE
 
 void stage2ex2(){
 	RecBuffer attrCatBuffer(ATTRCAT_BLOCK);
@@ -151,9 +147,9 @@ void stage2ex2(){
 int main(int argc, char *argv[]) {
 
 	Disk disk_run;
+	//stage2();
 	stage2ex1();
-	stage2ex2();
-	stage2ex1();
+	//stage2ex2();
 	return 0;
 	
 }
