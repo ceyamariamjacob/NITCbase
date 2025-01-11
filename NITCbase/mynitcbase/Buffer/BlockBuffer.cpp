@@ -15,23 +15,36 @@ RecBuffer::RecBuffer(int blockNum) : BlockBuffer::BlockBuffer(blockNum) {}
 
 // load the block header into the argument pointer
 int BlockBuffer::getHeader(struct HeadInfo *head) {
-  unsigned char buffer[BLOCK_SIZE];
+  //unsigned char buffer[BLOCK_SIZE];
+  
+  unsigned char *bufferPtr;
+  int ret = loadBlockAndGetBufferPtr(&bufferPtr);
+  if (ret != SUCCESS) {
+    return ret;   // return any errors that might have occured in the process
+  }
 
+/*
   // read the block at this.blockNum into the buffer
-  if(Disk::readBlock(buffer,this->blockNum) !=SUCCESS){return FAILURE;};
+  if(Disk::readBlock(buffer,this->blockNum) !=SUCCESS){return FAILURE;};*/
   
   // populate the numEntries, numAttrs and numSlots fields in *head
-  memcpy(&head->numSlots, buffer + 24, 4);
-  memcpy(&head->numEntries, buffer+16, 4);
-  memcpy(&head->numAttrs, buffer+20, 4);
-  memcpy(&head->rblock, buffer+12, 4);
-  memcpy(&head->lblock, buffer+8, 4);
+  memcpy(&head->numSlots, bufferPtr + 24, 4);
+  memcpy(&head->numEntries, bufferPtr + 16, 4);
+  memcpy(&head->numAttrs, bufferPtr + 20, 4);
+  memcpy(&head->rblock, bufferPtr + 12, 4);
+  memcpy(&head->lblock, bufferPtr + 8, 4);
 
   return SUCCESS;
 }
 
 // load the record at slotNum into the argument pointer
 int RecBuffer::getRecord(union Attribute *rec, int slotNum) {
+  unsigned char *bufferPtr;
+  int ret = loadBlockAndGetBufferPtr(&bufferPtr);
+  if (ret != SUCCESS) {
+    return ret;
+  }
+  
   struct HeadInfo head;
 
   // get the header using this.getHeader() function
@@ -39,11 +52,11 @@ int RecBuffer::getRecord(union Attribute *rec, int slotNum) {
 
   int attrCount = head.numAttrs;
   int slotCount = head.numSlots;
-
+/*
   // read the block at this.blockNum into a buffer
   unsigned char buffer[BLOCK_SIZE];
   
-  if(Disk::readBlock(buffer,this->blockNum)!=SUCCESS){return FAILURE;}
+  if(Disk::readBlock(buffer,this->blockNum)!=SUCCESS){return FAILURE;}*/
   
 
   /* record at slotNum will be at offset HEADER_SIZE + slotMapSize + (recordSize * slotNum)
@@ -52,10 +65,34 @@ int RecBuffer::getRecord(union Attribute *rec, int slotNum) {
   */
   int recordSize = attrCount * ATTR_SIZE;
   int slotMapSize= slotCount;
-  unsigned char *slotPointer = buffer+ HEADER_SIZE+slotMapSize+(recordSize*slotNum);
+  unsigned char *slotPointer = bufferPtr+ HEADER_SIZE+slotMapSize+(recordSize*slotNum);
 
   // load the record into the rec data structure
   memcpy(rec, slotPointer, recordSize);
+
+  return SUCCESS;
+}
+
+/*
+Used to load a block to the buffer and get a pointer to it.
+NOTE: this function expects the caller to allocate memory for the argument
+*/
+int BlockBuffer::loadBlockAndGetBufferPtr(unsigned char **buffPtr) {
+  // check whether the block is already present in the buffer using StaticBuffer.getBufferNum()
+  int bufferNum = StaticBuffer::getBufferNum(this->blockNum);
+
+  if (bufferNum == E_BLOCKNOTINBUFFER) {
+    bufferNum = StaticBuffer::getFreeBuffer(this->blockNum);
+
+    if (bufferNum == E_OUTOFBOUND) {
+      return E_OUTOFBOUND;
+    }
+
+    Disk::readBlock(StaticBuffer::blocks[bufferNum], this->blockNum);
+  }
+
+  // store the pointer to this buffer (blocks[bufferNum]) in *buffPtr
+  *buffPtr = StaticBuffer::blocks[bufferNum];
 
   return SUCCESS;
 }
@@ -80,19 +117,4 @@ int RecBuffer::setRecord(union Attribute *record, int slotNum){
 }
 
 
-/*
-int RecBuffer::loadBlockAndGetBuffer(unsigned char **buffPtr){
-  int bufferNum=StaticBuffer:getBufferNum(this->blockNum);
-  if(bufferNum==E_OUTOFBOUND){return E_OUTOFBOUND;}
-  
-  if(nufferNum!=E_BLOCKNOTINBUFFER){
-  	for(int bufferIdx=0; bufferIdx=BUFFER_CAPACITY;bufferIdx++){
-  		StaticBuffer::metainfo[bufferIdx].timeStamp++;
-  	}
-  	StaticBuffer::metainfo[bufferNum].timeStamp=0;
-  }
-  else if(bufferNum== E_BLOCKNOTINBUFFER){
-  	bufferNum=StaticBuffer::getFreeBuffer(this->blockNum);
-  	
-  } 
-}*/
+

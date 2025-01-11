@@ -147,9 +147,27 @@ void stage2ex2(){
 int main(int argc, char *argv[]) {
 
 	Disk disk_run;
-	//stage2();
-	stage2ex1();
+	StaticBuffer buffer;
+	OpenRelTable cache;
+	
+	//stage1();
 	//stage2ex2();
+	//stage2ex1();
+	
+	for(int i=0;i<=2;i++){
+		RelCatEntry relCatBuf;
+		RelCacheTable::getRelCatEntry(i,&relCatBuf);
+		cout<<"Relation: "<<relCatBuf.relName<<"\n";
+		
+		for(int j=0;j<relCatBuf.numAttrs;j++){
+			AttrCatEntry attrCatBuf;
+			AttrCacheTable::getAttrCatEntry(i,j,&attrCatBuf);
+			const char *attrType=attrCatBuf.attrType==NUMBER? "NUM":"STR";
+			cout<<"  "<<attrCatBuf.attrName<<": "<<attrType<<"\n";
+		}
+		cout<<"\n";
+	}
+	
 	return 0;
 	
 }
