@@ -1,4 +1,3 @@
-
 #include "Buffer/StaticBuffer.h"
 #include "Buffer/BlockBuffer.h"
 #include "Cache/OpenRelTable.h"
@@ -144,17 +143,12 @@ void stage2ex2(){
 	}
 	
 }
-int main(int argc, char *argv[]) {
+//****************************************************
+//STAGE 3-CACHE LAYER
 
-	Disk disk_run;
-	StaticBuffer buffer;
-	OpenRelTable cache;
-	
-	//stage1();
-	//stage2ex2();
-	//stage2ex1();
-	
-	for(int i=0;i<=2;i++){
+void stage3(){
+	//i<2 for stage 3 and i<=2 for stage 3 ex 1
+	for(int i=0;i<2;i++){
 		RelCatEntry relCatBuf;
 		RelCacheTable::getRelCatEntry(i,&relCatBuf);
 		cout<<"Relation: "<<relCatBuf.relName<<"\n";
@@ -167,6 +161,19 @@ int main(int argc, char *argv[]) {
 		}
 		cout<<"\n";
 	}
+}
+int main(int argc, char *argv[]) {
+
+	Disk disk_run;
+	StaticBuffer buffer;
+	OpenRelTable cache;
+	
+	//stage1();
+	//stage2ex2();
+	//stage2ex1();
+	//stage3();
+	
+	return FrontendInterface::handleFrontend(argc,argv);
 	
 	return 0;
 	
