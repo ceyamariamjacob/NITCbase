@@ -148,7 +148,7 @@ void stage2ex2(){
 
 void stage3(){
 	//i<2 for stage 3 and i<=2 for stage 3 ex 1
-	for(int i=0;i<2;i++){
+	for(int i=0;i<=2;i++){
 		RelCatEntry relCatBuf;
 		RelCacheTable::getRelCatEntry(i,&relCatBuf);
 		cout<<"Relation: "<<relCatBuf.relName<<"\n";
