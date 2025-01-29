@@ -5,6 +5,12 @@
 OpenRelTableMetaInfo OpenRelTable::tableMetaInfo[MAX_OPEN];
 
 
+/* This function will open a relation having name `relName`.
+Since we are currently only working with the relation and attribute catalog, we
+will just hardcode it. In subsequent stages, we will loop through all the relations
+and open the appropriate one.
+*/
+
 OpenRelTable::OpenRelTable(){
 	for(int i=0;i<MAX_OPEN;i++){
 		RelCacheTable::relCache[i]=nullptr;
@@ -82,11 +88,7 @@ OpenRelTable::OpenRelTable(){
 	
 }
 
-/* This function will open a relation having name `relName`.
-Since we are currently only working with the relation and attribute catalog, we
-will just hardcode it. In subsequent stages, we will loop through all the relations
-and open the appropriate one.
-
+/*
 int OpenRelTable::getRelId(char relName[ATTR_SIZE]) {
 
   // if relname is RELCAT_RELNAME, return RELCAT_RELID

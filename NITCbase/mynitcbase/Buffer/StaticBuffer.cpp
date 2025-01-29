@@ -22,8 +22,13 @@ StaticBuffer::~StaticBuffer(){
 }
 
 int StaticBuffer::getFreeBuffer(int blockNum){
-	if(blockNum < 0 || blockNum>DISK_BLOCKS){
+	if(blockNum < 0 || blockNum>=DISK_BLOCKS){
 		return E_OUTOFBOUND;
+	}
+	for (int bufferIndex = 0; bufferIndex < BUFFER_CAPACITY; bufferIndex++){
+		if(metainfo[bufferIndex].free==false){
+			metainfo[bufferIndex].timeStamp++;
+		}
 	}
 
 	int lruBufferIdx,largestTimeStamp=0;
