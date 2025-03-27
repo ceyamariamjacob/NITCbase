@@ -26,7 +26,7 @@ OpenRelTable::OpenRelTable(){
 	Attribute relCatRecord[RELCAT_NO_ATTRS];
 	RelCacheEntry *relCacheEntry=nullptr;
 		
-	for(int relId=RELCAT_RELID;relId<=ATTRCAT_RELID+1;relId++){	
+	for(int relId=RELCAT_RELID;relId<=ATTRCAT_RELID;relId++){	
 		relCatBlock.getRecord(relCatRecord, relId);
 		relCacheEntry = (RelCacheEntry *) malloc (sizeof(RelCacheEntry));
 		RelCacheTable::recordToRelCatEntry(relCatRecord, &(relCacheEntry->relCatEntry));
@@ -46,7 +46,7 @@ OpenRelTable::OpenRelTable(){
 	Attribute attrCatRecord[ATTRCAT_NO_ATTRS];
 	
 	
-	for(int relId=RELCAT_RELID,recordId=0;relId<=ATTRCAT_RELID+1;relId++){
+	for(int relId=RELCAT_RELID,recordId=0;relId<=ATTRCAT_RELID;relId++){
 		int attrNums=RelCacheTable::relCache[relId]->relCatEntry.numAttrs;
 		AttrCacheEntry *attrCacheEntry=nullptr, *head=nullptr, *curr=nullptr;
 		
