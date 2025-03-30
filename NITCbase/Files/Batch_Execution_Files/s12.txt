@@ -1,0 +1,12 @@
+create table Events(id NUM, title STR, location STR);
+create table Locations(name STR, capacity NUM);
+create table Participants(regNo NUM, event STR);
+echo DONE CREATING TABLES
+open table Events;
+open table Locations;
+open table Participants;
+echo DONE OPENING TABLES;
+insert into Events values from events.csv;
+insert into Locations values from locations.csv;
+insert into Participants values from participants.csv;
+echo DONE INSERTING INTO TABLES

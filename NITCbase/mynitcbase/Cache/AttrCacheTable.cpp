@@ -15,7 +15,14 @@ int AttrCacheTable::getAttrCatEntry(int relId, int attrOffset, AttrCatEntry* att
 	
 	for(AttrCacheEntry* entry =attrCache[relId]; entry!=nullptr; entry=entry->next){
 		if(entry->attrCatEntry.offset==attrOffset){
-			*attrCatBuf=entry->attrCatEntry;
+			strcpy(attrCatBuf->relName, entry->attrCatEntry.relName);
+            strcpy(attrCatBuf->attrName, entry->attrCatEntry.attrName);
+
+            attrCatBuf->attrType = entry->attrCatEntry.attrType;
+            attrCatBuf->primaryFlag = entry->attrCatEntry.primaryFlag;
+            attrCatBuf->rootBlock = entry->attrCatEntry.rootBlock;
+            attrCatBuf->offset = entry->attrCatEntry.offset;
+
 			return SUCCESS;
 		}
 	}
@@ -174,7 +181,7 @@ int AttrCacheTable::getSearchIndex(int relId, char attrName[ATTR_SIZE], IndexId 
 	// declare an IndexId having value {-1, -1}
 	// set the search index to {-1, -1} using AttrCacheTable::setSearchIndex
 	// return the value returned by setSearchIndex
-	IndexId searchIndex={-1,-1};
+	IndexId searchIndex{-1,-1};
 	return setSearchIndex(relId,attrName,&searchIndex);
   }
   int AttrCacheTable::resetSearchIndex(int relId, int attrOffset) {
@@ -182,7 +189,7 @@ int AttrCacheTable::getSearchIndex(int relId, char attrName[ATTR_SIZE], IndexId 
 	// declare an IndexId having value {-1, -1}
 	// set the search index to {-1, -1} using AttrCacheTable::setSearchIndex
 	// return the value returned by setSearchIndex
-	IndexId searchIndex={-1,-1};
+	IndexId searchIndex{-1,-1};
 	return setSearchIndex(relId,attrOffset,&searchIndex);
   }
 

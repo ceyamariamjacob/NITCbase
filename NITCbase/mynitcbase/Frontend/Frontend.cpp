@@ -103,7 +103,7 @@ int Frontend::select_attrlist_from_join_where(char relname_source_one[ATTR_SIZE]
   int ret=Algebra::join(relname_source_one, relname_source_two, TEMP, join_attr_one, join_attr_two);
   if(ret!=SUCCESS)return ret;
   ret=OpenRelTable::openRel(TEMP);
-  if(ret<0||ret<=MAX_OPEN){
+  if(ret<0||ret>=MAX_OPEN){
   Schema::deleteRel(TEMP);
   return ret;}
   
