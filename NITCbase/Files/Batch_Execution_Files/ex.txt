@@ -1,9 +1,7 @@
 select * from Participants join Events into a where Participants.event=Events.title;
 open table a;
-drop index on Events.title;
 select * from a join Locations into b where a.location=Locations.name;
 open table b;
-drop index on Locations.name;
 select * from b into c where capacity>100;
 open table c;
 select * from c into MiniEventPeople where capacity<200;
